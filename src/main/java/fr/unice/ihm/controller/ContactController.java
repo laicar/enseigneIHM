@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -52,11 +53,14 @@ public class ContactController {
 
     @FXML
     void cancelMailAction(ActionEvent event) {
-        closeWindow();
+        closeWindow(event);
     }
 
-    private void closeWindow() {
-        Stage stage = (Stage) annuler.getScene().getWindow();
+    private void closeWindow(ActionEvent event) {
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+
+        //Stage stage = (Stage) annuler.getScene().getWindow();
         stage.close();
     }
 
@@ -65,7 +69,7 @@ public class ContactController {
         mailModel = new MailModel(buildMailSender(), adresse.getText(), objetMail.getText(), corpsMail.getText());
         //sendMail();
         showMail();
-        closeWindow();
+        closeWindow(event);
     }
 
     private void sendMail() {
@@ -91,7 +95,7 @@ public class ContactController {
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
         message.setSubject(objetMail.getText());
         message.setText(mailModel.buildMessage());
-            Transport.send(message);
+        Transport.send(message);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
